@@ -1,11 +1,15 @@
 import './App.css';
+import { ThemeProvider } from 'styled-components';
+import customTheme from './theme';
+import GlobalStyles from './global.styles';
 
 function App() {
     return (
         <div className="App">
-            <header className="App-header">
+            <ThemeProvider theme={customTheme}>
                 <h1>Revolut</h1>
-            </header>
+                <GlobalStyles />
+            </ThemeProvider>
         </div>
     );
 }
