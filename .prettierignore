@@ -1,0 +1,6 @@
+public/
+coverage/
+keys/
+logs/
+node_modules/
+*.md
