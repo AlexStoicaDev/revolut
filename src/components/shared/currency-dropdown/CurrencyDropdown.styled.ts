@@ -9,7 +9,7 @@ export const DropDownHeader = styled.div`
     font-weight: bold;
     font-size: 20px;
     color: ${({ theme }) => theme.colors.main};
-    background: #ffffff;
+    text-align: left;
 
     & > * {
         vertical-align: middle;

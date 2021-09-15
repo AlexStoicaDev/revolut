@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { Currency } from '../../../models/Currency';
+import { Account } from '../../../models/Account';
 import {
     DropDownContainer,
     DropDownHeader,
@@ -10,36 +10,36 @@ import {
 } from './CurrencyDropdown.styled';
 
 interface CurrencyDropdownProps {
-    selectedCurrency: Currency;
-    currencies: Currency[];
-    onSelectCurrency: (selectedCurrency: Currency) => void;
+    availableAccounts: Account[];
+    selectedAccount: Account;
+    onSelectAccount: (accountId: number) => void;
 }
 
 const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
-    selectedCurrency,
-    currencies,
-    onSelectCurrency,
+    selectedAccount,
+    availableAccounts,
+    onSelectAccount,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggling = () => setIsOpen(!isOpen);
 
-    const onOptionClicked = (value: Currency) => () => {
-        onSelectCurrency(value);
+    const onOptionClicked = (accountId: number) => () => {
+        onSelectAccount(accountId);
         setIsOpen(false);
     };
 
     return (
         <DropDownContainer>
             <DropDownHeader data-testid="dropdown-handler" onClick={toggling}>
-                <span data-testid="selected-currency"> {selectedCurrency.code} </span>
+                <span data-testid="selected-currency"> {selectedAccount.currency.code} </span>
                 <RiArrowDownSLine size={28} />
             </DropDownHeader>
             {isOpen && (
                 <DropDownListContainer>
                     <DropDownList>
-                        {currencies.map((currency) => (
-                            <ListItem onClick={onOptionClicked(currency)} key={currency.code}>
-                                {`${currency.code} ${currency.symbol}`}
+                        {availableAccounts.map((account) => (
+                            <ListItem onClick={onOptionClicked(account.id)} key={account.id}>
+                                {`${account.currency.code} ${account.currency.symbol}`}
                             </ListItem>
                         ))}
                     </DropDownList>
