@@ -5,9 +5,10 @@ declare module 'styled-components' {
         colors: {
             main: string;
             accent: string;
+            lightWarning: string;
+            warning: string;
             inactive: string;
             grey: string;
-            lightGrey: string;
             background: string;
             white: string;
         };

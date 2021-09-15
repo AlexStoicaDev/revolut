@@ -27,4 +27,14 @@ export default createGlobalStyle`
         background: #F9F9F9;
         color: ${customTheme.colors.main};
     }
+    
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    
 `;
