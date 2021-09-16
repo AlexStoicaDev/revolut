@@ -26,7 +26,7 @@ export function exchangeReducer(
     action: ExchangeAction,
 ): ExchangeState {
     switch (action.type) {
-        case ExchangeActionTypes.SET_SELECTED_ACCOUNTS_AND_AMOUNT:
+        case ExchangeActionTypes.SET_SELECTED_ACCOUNTS_AND_AMOUNT_SUCCESS:
             const { fromAccount, toAccount, amount } = action.data;
             return { ...state, fromAccount, toAccount, amount };
         case ExchangeActionTypes.EXCHANGE_CURRENCIES_SUCCESS:

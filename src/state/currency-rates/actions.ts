@@ -5,11 +5,13 @@ export enum CurrencyRatesActionTypes {
 
 export interface loadCurrencyRatesAction {
     type: typeof CurrencyRatesActionTypes.LOAD_CURRENCY_RATES;
+    currencyCode: string;
 }
 
-export function loadCurrencyRates(): loadCurrencyRatesAction {
+export function loadCurrencyRates(currencyCode: string): loadCurrencyRatesAction {
     return {
         type: CurrencyRatesActionTypes.LOAD_CURRENCY_RATES,
+        currencyCode,
     };
 }
 

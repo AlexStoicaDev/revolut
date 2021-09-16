@@ -1,6 +1,6 @@
 import { expectSaga } from 'redux-saga-test-plan';
 import { fetchCurrencyRates } from '../../core/api';
-import { loadCurrencyRatesSuccess } from './actions';
+import { loadCurrencyRates, loadCurrencyRatesSuccess } from './actions';
 import { loadCurrencyRatesSaga } from './sagas';
 
 jest.mock('../../core/api', () => {
@@ -20,7 +20,9 @@ describe('currencyRatesSaga', () => {
                 conversionRates: { USD: 123 },
             });
 
-            return expectSaga(loadCurrencyRatesSaga)
+            const action = loadCurrencyRates('EUR');
+
+            return expectSaga(loadCurrencyRatesSaga, action)
                 .put(loadCurrencyRatesSuccess('EUR', { USD: 123 }))
                 .call(fetchCurrencyRates, 'EUR')
                 .run();

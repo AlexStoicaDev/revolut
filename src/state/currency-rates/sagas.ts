@@ -1,14 +1,26 @@
-import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
+import { all, call, delay, put, select, takeLatest } from 'redux-saga/effects';
 import { fetchCurrencyRates } from '../../core/api';
-import { CurrencyRatesActionTypes, loadCurrencyRates, loadCurrencyRatesSuccess } from './actions';
+import { selectChoosenAccounts } from '../exchange/selectors';
+import {
+    CurrencyRatesActionTypes,
+    loadCurrencyRates,
+    loadCurrencyRatesAction,
+    loadCurrencyRatesSuccess,
+} from './actions';
 
-export function* loadCurrencyRatesSaga() {
-    const { baseCurrencyCode, conversionRates } = yield call(fetchCurrencyRates, 'EUR');
+export function* loadCurrencyRatesSaga({ currencyCode }: loadCurrencyRatesAction): any {
+    const state = yield select();
+    if (!currencyCode) {
+        const { fromAccount } = selectChoosenAccounts(state);
+        currencyCode = fromAccount.currency.code;
+    }
+    const { baseCurrencyCode, conversionRates } = yield call(fetchCurrencyRates, currencyCode);
     yield put(loadCurrencyRatesSuccess(baseCurrencyCode, conversionRates));
 }
+
 export function* refetchRatesSaga() {
     while (true) {
-        yield put(loadCurrencyRates());
+        yield put(loadCurrencyRates(''));
         yield delay(10000);
     }
 }
