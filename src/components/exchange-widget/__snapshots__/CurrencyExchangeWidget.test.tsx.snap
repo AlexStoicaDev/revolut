@@ -1,0 +1,203 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CurrencyExchangeWidget should render the CurrencyExchangeWidget component correcly 1`] = `
+<div>
+  <form
+    class="sc-kEjbQP cqa-DPr"
+  >
+    <div
+      class="sc-crrszt XjWjY"
+      data-testid="exchange-description"
+    >
+      <h3>
+        Sell 
+        GBP
+      </h3>
+    </div>
+    <div
+      class="sc-dQoVA inrupo"
+    >
+      <svg
+        fill="currentColor"
+        height="1em"
+        stroke="currentColor"
+        stroke-width="0"
+        viewBox="0 0 1024 1024"
+        width="1em"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M904 747H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM165.7 621.8l39.7 39.5c3.1 3.1 8.2 3.1 11.3 0l234.7-233.9 97.6 97.3a32.11 32.11 0 0 0 45.2 0l264.2-263.2c3.1-3.1 3.1-8.2 0-11.3l-39.7-39.6a8.03 8.03 0 0 0-11.3 0l-235.7 235-97.7-97.3a32.11 32.11 0 0 0-45.2 0L165.7 610.5a7.94 7.94 0 0 0 0 11.3z"
+        />
+      </svg>
+      <span
+        data-testid="exchange-rate"
+      >
+        £1 = 0.83€
+      </span>
+    </div>
+    <div
+      class="sc-gKseQn hYSsdt"
+    >
+      <div
+        class="sc-iBPTik dJlHmu"
+      >
+        <div
+          class="sc-gsTEea ifvwXS"
+        >
+          <div
+            class="sc-dlfnuX itEhnx"
+            data-testid="dropdown-handler"
+          >
+            <span
+              data-testid="selected-currency"
+            >
+               
+              GBP
+               
+            </span>
+            <svg
+              fill="currentColor"
+              height="28"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              width="28"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g>
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <input
+          class="sc-fubCzh hdFaqs"
+          data-testid="currency-input"
+          min="0"
+          placeholder="0"
+          step="1"
+          type="number"
+          value=""
+        />
+      </div>
+      <div
+        class="sc-pGacB gTpwTn"
+      >
+        <span
+          data-testid="account-balance"
+        >
+          Balance: £ 300
+        </span>
+        <span
+          class="sc-jrAFXE laYvyI"
+          data-testid="balance-warning"
+        >
+          exceeds balance
+        </span>
+      </div>
+    </div>
+    <svg
+      class="sc-iqHYmW iXiHPo"
+      data-testid="cashflow-arrow"
+      fill="currentColor"
+      height="1em"
+      stroke="currentColor"
+      stroke-width="0"
+      viewBox="0 0 24 24"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M12.001,1.993C6.486,1.994,2,6.48,2,11.994c0.001,5.514,4.487,10,10,10c5.515,0,10.001-4.486,10.001-10 S17.515,1.994,12.001,1.993z M12,19.994c-4.41,0-7.999-3.589-8-8c0-4.411,3.589-8,8.001-8.001c4.411,0.001,8,3.59,8,8.001 S16.412,19.994,12,19.994z"
+      />
+      <path
+        d="M12.001 8.001L7.996 12.006 11.001 12.006 11.001 16 13.001 16 13.001 12.006 16.005 12.006z"
+      />
+    </svg>
+    <div
+      class="sc-gKseQn hYSsdt"
+    >
+      <div
+        class="sc-iBPTik dJlHmu"
+      >
+        <div
+          class="sc-gsTEea ifvwXS"
+        >
+          <div
+            class="sc-dlfnuX itEhnx"
+            data-testid="dropdown-handler"
+          >
+            <span
+              data-testid="selected-currency"
+            >
+               
+              EUR
+               
+            </span>
+            <svg
+              fill="currentColor"
+              height="28"
+              stroke="currentColor"
+              stroke-width="0"
+              viewBox="0 0 24 24"
+              width="28"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g>
+                <path
+                  d="M0 0h24v24H0z"
+                  fill="none"
+                />
+                <path
+                  d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <input
+          class="sc-fubCzh hdFaqs"
+          data-testid="currency-input"
+          min="0"
+          placeholder="0"
+          step="1"
+          type="number"
+          value=""
+        />
+      </div>
+      <div
+        class="sc-pGacB gTpwTn"
+      >
+        <span
+          data-testid="account-balance"
+        >
+          Balance: € 200
+        </span>
+        <span
+          class="sc-jrAFXE laYvyI"
+          data-testid="balance-warning"
+        >
+          exceeds balance
+        </span>
+      </div>
+    </div>
+    <button
+      class="sc-bdfBQB jjMWNz"
+      data-testid="exchange-button"
+      disabled=""
+      type="submit"
+    >
+      <span>
+        Sell GBP for EUR
+      </span>
+    </button>
+  </form>
+</div>
+`;
