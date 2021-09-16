@@ -56,6 +56,22 @@ describe('CurrencyExchangeInput', () => {
         expect(mockOnCurrencyInputChange).toHaveBeenNthCalledWith(3, '5003');
     });
 
+    it('users can only type 2 numbers after the .', () => {
+        const testProps = {
+            ...props,
+            currencyInputValue: '45.12',
+        };
+        const { getByTestId } = renderWithTheme(<CurrencyExchangeInput {...testProps} />);
+
+        const currencyInput = getByTestId('currency-input');
+        expect(currencyInput).toBeInTheDocument();
+
+        userEvent.type(currencyInput, '3');
+
+        expect(mockOnCurrencyInputChange).toBeCalledTimes(1);
+        expect(mockOnCurrencyInputChange).toHaveBeenNthCalledWith(1, '45.12');
+    });
+
     it('should not display exceeds balance warning', () => {
         const { getByTestId } = renderWithTheme(<CurrencyExchangeInput {...props} />);
 
