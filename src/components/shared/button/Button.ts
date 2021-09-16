@@ -11,6 +11,7 @@ const Button = styled.button`
     outline: none;
     cursor: pointer;
     border: none;
+    width: 200px;
 
     & > * {
         vertical-align: middle;
