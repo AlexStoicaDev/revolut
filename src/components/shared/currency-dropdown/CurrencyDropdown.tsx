@@ -12,7 +12,7 @@ import {
 interface CurrencyDropdownProps {
     availableAccounts: Account[];
     selectedAccount: Account;
-    onSelectAccount: (accountId: number) => void;
+    onSelectAccount: (account: Account) => void;
 }
 
 const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
@@ -23,8 +23,8 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
     const [isOpen, setIsOpen] = useState(false);
     const toggling = () => setIsOpen(!isOpen);
 
-    const onOptionClicked = (accountId: number) => () => {
-        onSelectAccount(accountId);
+    const onOptionClicked = (account: Account) => () => {
+        onSelectAccount(account);
         setIsOpen(false);
     };
 
@@ -38,7 +38,7 @@ const CurrencyDropdown: React.FC<CurrencyDropdownProps> = ({
                 <DropDownListContainer>
                     <DropDownList>
                         {availableAccounts.map((account) => (
-                            <ListItem onClick={onOptionClicked(account.id)} key={account.id}>
+                            <ListItem onClick={onOptionClicked(account)} key={account.id}>
                                 {`${account.currency.code} ${account.currency.symbol}`}
                             </ListItem>
                         ))}

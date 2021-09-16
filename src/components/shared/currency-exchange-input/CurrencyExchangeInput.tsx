@@ -13,7 +13,7 @@ interface ExchangeInputProps {
     selectedAccount: Account;
     currencyInputValue: string;
     exceedsBalance: boolean;
-    onSelectAccount: (accountId: number) => void;
+    onSelectAccount: (account: Account) => void;
     onCurrencyInputChange: (newValue: string) => void;
 }
 const CurrencyExchangeInput: React.FC<ExchangeInputProps> = ({

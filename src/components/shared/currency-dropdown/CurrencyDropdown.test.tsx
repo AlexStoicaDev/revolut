@@ -43,6 +43,6 @@ describe('CurrencyDropdown', () => {
         const euroCurrencyOption = getByText('EUR €');
         expect(euroCurrencyOption).toBeInTheDocument();
         userEvent.click(euroCurrencyOption);
-        expect(mockOnSelectAccount).toBeCalledWith(accounts[1].id);
+        expect(mockOnSelectAccount).toBeCalledWith(accounts[1]);
     });
 });
