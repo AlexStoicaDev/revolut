@@ -1,6 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { AiOutlineStock } from 'react-icons/ai';
+import { useDispatch, useSelector } from 'react-redux';
 import { Account } from '../../models/Account';
-import { currencyExchange, getExchangeRate } from './mock';
+import { selectExchangeRateForCurrency } from '../../state/currency-rates/selectors';
+import { setSelectedAccountsAndAmount } from '../../state/exchange/actions';
+import { selectAvailableAccounts, selectChoosenAccounts } from '../../state/exchange/selectors';
+import { State } from '../../state/state';
+import { getExchangedValue } from '../../utils/exchange';
 import Button from '../shared/button/Button';
 import CurrencyExchangeInput from '../shared/currency-exchange-input/CurrencyExchangeInput';
 import {
@@ -9,7 +15,6 @@ import {
     ExchangeRate,
     StyledCurrencyExchangeWidget,
 } from './CurrencyExchangeWidget.styled';
-import { AiOutlineStock } from 'react-icons/ai';
 
 enum ExchangeAction {
     SELL = 'sell',
@@ -17,28 +22,25 @@ enum ExchangeAction {
 }
 const defaultInputState = {
     value: '',
-    valueAsNumber: 0,
     exceedsBalance: false,
 };
 
-interface CurrencyExchangeWidgetProps {
-    accounts: Account[];
-}
-const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ accounts }) => {
-    const [firstSelectedAccount, setFirstSelectedAccount] = useState(accounts[0]);
-    const [secondSelectedAccount, setSecondSelectedAccount] = useState(accounts[1]);
+const CurrencyExchangeWidget: React.FC = () => {
+    const dispatch = useDispatch();
     const [firstCurrencyInputState, setFirstCurrencyInputState] = useState(defaultInputState);
     const [secondCurrencyInputState, setSecondCurrencyInputState] = useState(defaultInputState);
     const [exchangeAction, setExchangeAction] = useState<ExchangeAction>(ExchangeAction.SELL);
-    const [exchangeRate, setExchangeRate] = useState(
-        getExchangeRate(firstSelectedAccount.currency, secondSelectedAccount.currency),
+    const { accounts, firstSelectedAccount, secondSelectedAccount, exchangeRate } = useSelector(
+        (s) => {
+            const { fromAccount, toAccount } = selectChoosenAccounts(s as State);
+            return {
+                accounts: selectAvailableAccounts(s as State),
+                firstSelectedAccount: fromAccount,
+                secondSelectedAccount: toAccount,
+                exchangeRate: selectExchangeRateForCurrency(toAccount.currency.code, s as State),
+            };
+        },
     );
-
-    useEffect(() => {
-        setExchangeRate(
-            getExchangeRate(firstSelectedAccount.currency, secondSelectedAccount.currency),
-        );
-    }, [firstSelectedAccount, secondSelectedAccount]);
 
     const firstInputExceedsBalance = (
         exchangeAction: ExchangeAction,
@@ -49,6 +51,7 @@ const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ account
             firstSelectedAccount.balance - valueToSubstract < 0
         );
     };
+
     const secondInputExceedsBalance = (
         exchangeAction: ExchangeAction,
         valueToSubstract: number,
@@ -59,71 +62,67 @@ const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ account
         );
     };
 
-    const onSelectAccount = (
-        newAccountId: number,
-        previousAccountId: number,
-        theOtherAccountId: number,
-        setterFunction: (account: Account) => void,
-    ) => {
-        if (newAccountId === previousAccountId) {
-            return;
-        }
-        if (newAccountId === theOtherAccountId) {
-            const aux = firstSelectedAccount;
-            setFirstSelectedAccount(secondSelectedAccount);
-            setSecondSelectedAccount(aux);
-        } else {
-            const newSelectedAccount = accounts.find(({ id }) => id === newAccountId);
-            newSelectedAccount && setterFunction(newSelectedAccount);
-        }
+    const clearInputsStates = () => {
         setFirstCurrencyInputState(defaultInputState);
         setSecondCurrencyInputState(defaultInputState);
+    };
+
+    const onSelectFirstAccount = (newAccount: Account) => {
+        if (newAccount.id === firstSelectedAccount.id) {
+            return;
+        }
+        if (newAccount.id === secondSelectedAccount.id) {
+            dispatch(setSelectedAccountsAndAmount(secondSelectedAccount, firstSelectedAccount, 0));
+        } else {
+            dispatch(setSelectedAccountsAndAmount(newAccount, secondSelectedAccount, 0));
+        }
+        clearInputsStates();
+    };
+
+    const onSelectSecondAccount = (newAccount: Account) => {
+        if (newAccount.id === secondSelectedAccount.id) {
+            return;
+        }
+        if (newAccount.id === firstSelectedAccount.id) {
+            dispatch(setSelectedAccountsAndAmount(secondSelectedAccount, firstSelectedAccount, 0));
+        } else {
+            dispatch(setSelectedAccountsAndAmount(firstSelectedAccount, newAccount, 0));
+        }
+        clearInputsStates();
     };
 
     const onCashflowArrowClick = (newExchangeAction: ExchangeAction) => {
         setExchangeAction(newExchangeAction);
         setFirstCurrencyInputState((inputState) => ({
             ...inputState,
-            exceedsBalance: firstInputExceedsBalance(newExchangeAction, inputState.valueAsNumber),
+            exceedsBalance: firstInputExceedsBalance(newExchangeAction, Number(inputState)),
         }));
         setSecondCurrencyInputState((inputState) => ({
             ...inputState,
-            exceedsBalance: secondInputExceedsBalance(newExchangeAction, inputState.valueAsNumber),
+            exceedsBalance: secondInputExceedsBalance(newExchangeAction, Number(inputState)),
         }));
     };
 
     const handleFirstCurrencyInputChange = (value: string) => {
-        const exhangeValue = currencyExchange(
-            Number(value),
-            firstSelectedAccount.currency,
-            secondSelectedAccount.currency,
-        );
+        const exhangeValue = getExchangedValue(Number(value), exchangeRate);
         setFirstCurrencyInputState({
             value: value,
-            valueAsNumber: Number(value),
             exceedsBalance: firstInputExceedsBalance(exchangeAction, Number(value)),
         });
         setSecondCurrencyInputState({
             value: exhangeValue.toString(),
-            valueAsNumber: exhangeValue,
             exceedsBalance: secondInputExceedsBalance(exchangeAction, exhangeValue),
         });
     };
 
     const handleSecondCurrencyInputChange = (value: string) => {
-        const exhangeValue = currencyExchange(
-            Number(value),
-            secondSelectedAccount.currency,
-            firstSelectedAccount.currency,
-        );
+        const exhangeValue = getExchangedValue(Number(value), exchangeRate);
         setSecondCurrencyInputState({
             value: value,
-            valueAsNumber: Number(value),
             exceedsBalance: secondInputExceedsBalance(exchangeAction, Number(value)),
         });
         setFirstCurrencyInputState({
             value: exhangeValue.toString(),
-            valueAsNumber: exhangeValue,
             exceedsBalance: firstInputExceedsBalance(exchangeAction, exhangeValue),
         });
     };
@@ -136,8 +135,8 @@ const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ account
     const isButtonDisabled =
         firstCurrencyInputState.exceedsBalance ||
         secondCurrencyInputState.exceedsBalance ||
-        firstCurrencyInputState.valueAsNumber === 0 ||
-        secondCurrencyInputState.valueAsNumber === 0;
+        Number(firstCurrencyInputState.value) === 0 ||
+        Number(secondCurrencyInputState.value) === 0;
 
     return (
         <StyledCurrencyExchangeWidget>
@@ -149,19 +148,14 @@ const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ account
             </ExchangeDescription>
             <ExchangeRate>
                 <AiOutlineStock />
-                <span data-testid="exchange-rate">{`${firstSelectedAccount.currency.symbol}1 = ${exchangeRate}${secondSelectedAccount.currency.symbol}`}</span>
+                <span data-testid="exchange-rate">{`${firstSelectedAccount.currency.symbol}1 = ${
+                    exchangeRate || '...'
+                }${secondSelectedAccount.currency.symbol}`}</span>
             </ExchangeRate>
             <CurrencyExchangeInput
                 availableAccounts={accounts}
                 selectedAccount={firstSelectedAccount}
-                onSelectAccount={(accountId: number) =>
-                    onSelectAccount(
-                        accountId,
-                        firstSelectedAccount.id,
-                        secondSelectedAccount.id,
-                        setFirstSelectedAccount,
-                    )
-                }
+                onSelectAccount={onSelectFirstAccount}
                 currencyInputValue={firstCurrencyInputState.value}
                 exceedsBalance={firstCurrencyInputState.exceedsBalance}
                 onCurrencyInputChange={handleFirstCurrencyInputChange}
@@ -180,14 +174,7 @@ const CurrencyExchangeWidget: React.FC<CurrencyExchangeWidgetProps> = ({ account
             <CurrencyExchangeInput
                 availableAccounts={accounts}
                 selectedAccount={secondSelectedAccount}
-                onSelectAccount={(accountId: number) =>
-                    onSelectAccount(
-                        accountId,
-                        secondSelectedAccount.id,
-                        firstSelectedAccount.id,
-                        setSecondSelectedAccount,
-                    )
-                }
+                onSelectAccount={onSelectSecondAccount}
                 currencyInputValue={secondCurrencyInputState.value}
                 exceedsBalance={secondCurrencyInputState.exceedsBalance}
                 onCurrencyInputChange={handleSecondCurrencyInputChange}

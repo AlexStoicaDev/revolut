@@ -1,9 +1,27 @@
 import { cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Account } from '../../models/Account';
-import { renderWithTheme } from '../../utils/testing';
+import { Currency } from '../../models/Currency';
+import { renderWithTheme, useSelector } from '../../utils/testing';
 import CurrencyExchangeWidget from './CurrencyExchangeWidget';
-import { currencyExchange, getExchangeRate } from './mock';
+
+interface Map {
+    [key: string]: number | undefined;
+}
+
+const currencyPairs: Map = {
+    GBPUSD: 1.38,
+    GBPEUR: 1.17,
+    EURUSD: 1.18,
+    EURGBP: 0.83,
+    USDGBP: 0.62,
+    USDEUR: 0.82,
+};
+
+const getExchangeRate = (currencyFrom: Currency, currencyTo: Currency) => {
+    const currencyCode = currencyTo.code + currencyFrom.code;
+    return currencyPairs[currencyCode];
+};
 
 afterEach(cleanup);
 
@@ -18,18 +36,26 @@ const accounts: Account[] = [
     { id: 3, balance: 500, currency: currencies[2] },
 ];
 
-const props = {
-    accounts,
-};
-
 describe('CurrencyExchangeWidget', () => {
     it('should render the CurrencyExchangeWidget component correcly', () => {
-        const { container } = renderWithTheme(<CurrencyExchangeWidget {...props} />);
+        useSelector.mockReturnValue({
+            accounts,
+            firstSelectedAccount: accounts[0],
+            secondSelectedAccount: accounts[1],
+            exchangeRate: getExchangeRate(accounts[0].currency, accounts[1].currency),
+        });
+        const { container } = renderWithTheme(<CurrencyExchangeWidget />);
         expect(container).toMatchSnapshot();
     });
 
     it('can switch from sell to buy and vice versa', () => {
-        const { getByTestId } = renderWithTheme(<CurrencyExchangeWidget {...props} />);
+        useSelector.mockReturnValue({
+            accounts,
+            firstSelectedAccount: accounts[0],
+            secondSelectedAccount: accounts[1],
+            exchangeRate: getExchangeRate(accounts[0].currency, accounts[1].currency),
+        });
+        const { getByTestId } = renderWithTheme(<CurrencyExchangeWidget />);
         const cashflowArrow = getByTestId('cashflow-arrow');
         const exchangeDescription = getByTestId('exchange-description');
         const exchangeRate = getByTestId('exchange-rate');
@@ -70,7 +96,14 @@ describe('CurrencyExchangeWidget', () => {
     });
 
     it('change in one of the inputs triggers convertion and change in the other', () => {
-        const { getAllByTestId } = renderWithTheme(<CurrencyExchangeWidget {...props} />);
+        const exchangeRate = getExchangeRate(accounts[0].currency, accounts[1].currency);
+        useSelector.mockReturnValue({
+            accounts,
+            firstSelectedAccount: accounts[0],
+            secondSelectedAccount: accounts[1],
+            exchangeRate,
+        });
+        const { getAllByTestId } = renderWithTheme(<CurrencyExchangeWidget />);
         const [firstCurrencyExchangeInput, secondCurrencyExchangeInput] =
             getAllByTestId('currency-input');
 
@@ -78,9 +111,7 @@ describe('CurrencyExchangeWidget', () => {
         userEvent.type(firstCurrencyExchangeInput, '1');
 
         // @ts-ignore
-        expect(secondCurrencyExchangeInput.value).toBe(
-            currencyExchange(21, accounts[0].currency, accounts[1].currency).toString(),
-        );
+        expect(secondCurrencyExchangeInput.value).toBe((21 * exchangeRate).toString());
 
         userEvent.clear(firstCurrencyExchangeInput);
         // @ts-ignore
@@ -88,9 +119,13 @@ describe('CurrencyExchangeWidget', () => {
     });
 
     it('button id disabled when inputs are empty or one of them exceeds balance', () => {
-        const { getByTestId, getAllByTestId } = renderWithTheme(
-            <CurrencyExchangeWidget {...props} />,
-        );
+        useSelector.mockReturnValue({
+            accounts,
+            firstSelectedAccount: accounts[0],
+            secondSelectedAccount: accounts[1],
+            exchangeRate: getExchangeRate(accounts[0].currency, accounts[1].currency),
+        });
+        const { getByTestId, getAllByTestId } = renderWithTheme(<CurrencyExchangeWidget />);
         const exchangeButton = getByTestId('exchange-button');
         const [firstCurrencyExchangeInput, secondCurrencyExchangeInput] =
             getAllByTestId('currency-input');
@@ -111,9 +146,13 @@ describe('CurrencyExchangeWidget', () => {
     });
 
     it('button is enabled when the inputs contain correct values', () => {
-        const { getByTestId, getAllByTestId } = renderWithTheme(
-            <CurrencyExchangeWidget {...props} />,
-        );
+        useSelector.mockReturnValue({
+            accounts,
+            firstSelectedAccount: accounts[0],
+            secondSelectedAccount: accounts[1],
+            exchangeRate: getExchangeRate(accounts[0].currency, accounts[1].currency),
+        });
+        const { getByTestId, getAllByTestId } = renderWithTheme(<CurrencyExchangeWidget />);
         const exchangeButton = getByTestId('exchange-button');
         const [firstCurrencyExchangeInput, secondCurrencyExchangeInput] =
             getAllByTestId('currency-input');

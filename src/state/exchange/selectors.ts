@@ -11,3 +11,7 @@ export function selectChoosenAccounts(state: State): {
 export function selectChoosenAmount(state: State): number {
     return state.exchange.amount;
 }
+
+export function selectAvailableAccounts(state: State): Account[] {
+    return state.exchange.availableAccounts;
+}
