@@ -1,9 +1,9 @@
-import { all, delay, put, takeLatest } from 'redux-saga/effects';
-import { mockFetchRates } from '../../core/api';
+import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
+import { fetchCurrencyRates } from '../../core/api';
 import { CurrencyRatesActionTypes, loadCurrencyRates, loadCurrencyRatesSuccess } from './actions';
 
 export function* loadCurrencyRatesSaga() {
-    const { baseCurrencyCode, conversionRates } = mockFetchRates('EUR');
+    const { baseCurrencyCode, conversionRates } = yield call(fetchCurrencyRates, 'EUR');
     yield put(loadCurrencyRatesSuccess(baseCurrencyCode, conversionRates));
 }
 export function* refetchRatesSaga() {

@@ -1,18 +1,20 @@
 import { expectSaga } from 'redux-saga-test-plan';
-import { mockFetchRates } from '../../core/api';
+import { fetchCurrencyRates } from '../../core/api';
 import { loadCurrencyRatesSuccess } from './actions';
 import { loadCurrencyRatesSaga } from './sagas';
 
 jest.mock('../../core/api', () => {
     return {
-        mockFetchRates: jest.fn(),
+        fetchCurrencyRates: jest.fn(),
     };
 });
 
 describe('currencyRatesSaga', () => {
     describe('loadCurrencyRatesSaga', () => {
         it('should call rates api and disptach success action', () => {
-            (mockFetchRates as jest.MockedFunction<typeof mockFetchRates>).mockReturnValue({
+            (
+                fetchCurrencyRates as jest.MockedFunction<typeof fetchCurrencyRates>
+            ).mockResolvedValueOnce({
                 baseCurrencyCode: 'EUR',
                 // @ts-ignore
                 conversionRates: { USD: 123 },
@@ -20,6 +22,7 @@ describe('currencyRatesSaga', () => {
 
             return expectSaga(loadCurrencyRatesSaga)
                 .put(loadCurrencyRatesSuccess('EUR', { USD: 123 }))
+                .call(fetchCurrencyRates, 'EUR')
                 .run();
         });
     });
