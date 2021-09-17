@@ -21,7 +21,8 @@ export function* loadCurrencyRatesSaga({ currencyCode }: loadCurrencyRatesAction
 export function* refetchRatesSaga() {
     while (true) {
         yield put(loadCurrencyRates(''));
-        yield delay(10000);
+        // set to more than 10s so we do not use all the free requests from the exchangerate-api
+        yield delay(100000);
     }
 }
 
