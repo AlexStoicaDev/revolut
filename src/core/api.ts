@@ -25,8 +25,9 @@ const fetchCurrencyRatesDataMapper = (data: {
 
 export const fetchCurrencyRates = (currencyCode: string) => {
     //!!The api-key part of the url would normally be inside a vault stored safely not in plain text in the code
+    const API_KEY = '4f6fdf416b949593ab51321f';
     return get(
-        `https://v6.exchangerate-api.com/v6/733c0dbe6279a25c3edda75c/latest/${currencyCode}`,
+        `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/${currencyCode}`,
         fetchCurrencyRatesDataMapper,
     );
 };
