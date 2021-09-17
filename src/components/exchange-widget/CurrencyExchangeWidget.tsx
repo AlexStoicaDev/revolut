@@ -179,7 +179,13 @@ const CurrencyExchangeWidget: React.FC = () => {
                 exceedsBalance={secondCurrencyInputState.exceedsBalance}
                 onCurrencyInputChange={handleSecondCurrencyInputChange}
             />
-            <Button type="submit" data-testid="exchange-button" disabled={isButtonDisabled}>
+            <Button
+                data-testid="exchange-button"
+                disabled={isButtonDisabled}
+                onClick={() => {
+                    alert('succesful transaction');
+                }}
+            >
                 <span>{getButtonText}</span>
             </Button>
         </StyledCurrencyExchangeWidget>

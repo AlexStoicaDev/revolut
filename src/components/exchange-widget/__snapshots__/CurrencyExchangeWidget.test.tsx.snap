@@ -192,7 +192,6 @@ exports[`CurrencyExchangeWidget should render the CurrencyExchangeWidget compone
       class="sc-bdfBQB jjMWNz"
       data-testid="exchange-button"
       disabled=""
-      type="submit"
     >
       <span>
         Sell GBP for EUR
