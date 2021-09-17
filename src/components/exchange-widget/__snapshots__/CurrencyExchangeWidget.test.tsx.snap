@@ -82,7 +82,7 @@ exports[`CurrencyExchangeWidget should render the CurrencyExchangeWidget compone
           data-testid="currency-input"
           min="0"
           placeholder="0"
-          step="1"
+          step="any"
           type="number"
           value=""
         />
@@ -167,7 +167,7 @@ exports[`CurrencyExchangeWidget should render the CurrencyExchangeWidget compone
           data-testid="currency-input"
           min="0"
           placeholder="0"
-          step="1"
+          step="any"
           type="number"
           value=""
         />
