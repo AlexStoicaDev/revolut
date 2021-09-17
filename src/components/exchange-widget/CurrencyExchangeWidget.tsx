@@ -95,11 +95,11 @@ const CurrencyExchangeWidget: React.FC = () => {
         setExchangeAction(newExchangeAction);
         setFirstCurrencyInputState((inputState) => ({
             ...inputState,
-            exceedsBalance: firstInputExceedsBalance(newExchangeAction, Number(inputState)),
+            exceedsBalance: firstInputExceedsBalance(newExchangeAction, Number(inputState.value)),
         }));
         setSecondCurrencyInputState((inputState) => ({
             ...inputState,
-            exceedsBalance: secondInputExceedsBalance(newExchangeAction, Number(inputState)),
+            exceedsBalance: secondInputExceedsBalance(newExchangeAction, Number(inputState.value)),
         }));
     };
 
